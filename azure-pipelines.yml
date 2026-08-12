@@ -14,6 +14,25 @@ pool: rishi_agent_pool
        terraformversion: 'latest'
 
 
+   - task: TerraformTask@5
+     inputs:
+     provider: 'azurerm'
+     command: 'init'
+     backendServiceArm: 'rishi_service'
+     backendAzureRmOverrideSubscriptionID: '6c4275d7-e765-46db-bbc8-a283185caf4a'
+     backendAzureRmResourceGroupName: 'rishi-rg'
+     backendAzureRmStorageAccountName: 'rishistorage15'
+     backendAzureRmContainerName: 'rishi-container-123'
+     backendAzureRmKey: 'terraform.tfstate'
  
-
+   - task: TerraformTask@5
+     inputs:
+       provider: 'azurerm'
+       command: 'plan'
+       environmentServiceNameAzureRM: 'rishi_service'
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        environmentServiceNameAzureRM: 'rishi_service'
   
