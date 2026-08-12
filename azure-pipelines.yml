@@ -1,0 +1,19 @@
+trigger:
+ branches:
+   include:
+     - main
+pool: rishi_agent_pool
+ stages: infrastage
+ displayname: "infrastructure stage"
+ jobs:
+ - jobs: terraformjob
+   displayname: "terraform deployment"
+   steps:
+   - task: terraforminstaller@1
+     inputs:
+       terraformversion: 'latest'
+
+
+ 
+
+  
