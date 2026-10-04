@@ -1,18 +1,20 @@
 trigger:
  - main
 
-pool: rangent-pool
+pool: ragent-pool
 stages:
-  - stage: Terraform Plan
+  - stage: TerraformPlan
     displayName: Terraform plan
     jobs:
-      - job: Terraform plan
+      - job: Terraformplan
         displayName: Terraform plan
         steps:
           - task: TerraformInstaller@1
+            displayName: Terraform install
             inputs:
               terraformVersion: 'latest'
           - task: TerraformTask@5
+            displayName: Terraform Init
             inputs:
               provider: 'azurerm'
               command: 'init'
@@ -21,11 +23,13 @@ stages:
               backendAzureRmContainerName: 'xyzcontainer'
               backendAzureRmKey: 'terraform.tfstate'
           - task: TerraformTask@5
+            displayName: Terraform plan
             inputs:
               provider: 'azurerm'
               command: 'plan'
               environmentServiceNameAzureRM: 'xyzconnection'
           - task: TerraformTask@5
+            displayName: Terraform apply
             inputs:
               provider: 'azurerm'
               command: 'apply'
