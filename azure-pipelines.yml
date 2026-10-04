@@ -1,47 +1,33 @@
 trigger:
-  branches:
-    include:
-      - main
+ - main
 
-pool: rishi_agent_pool
-
+pool: rangent-pool
 stages:
-  - stage: infrastage
-    displayName: "Infrastructure Stage"
-
+  - stage: Terraform Plan
+    displayName: Terraform plan
     jobs:
-      - job: terraformjob
-        displayName: "Terraform Deployment"
-
+      - job: Terraform plan
+        displayName: Terraform plan
         steps:
-
           - task: TerraformInstaller@1
-            displayName: "Install Terraform"
             inputs:
               terraformVersion: 'latest'
-
           - task: TerraformTask@5
-            displayName: "Terraform Init"
             inputs:
               provider: 'azurerm'
               command: 'init'
-              backendServiceArm: 'rishi_service'
-              backendAzureRmOverrideSubscriptionID: '6c4275d7-e765-46db-bbc8-a283185caf4a'
-              backendAzureRmResourceGroupName: 'rishi-rg'
-              backendAzureRmStorageAccountName: 'rishistorage15'
-              backendAzureRmContainerName: 'rishi-container-123'
+              backendServiceArm: 'xyzconnection'
+              backendAzureRmStorageAccountName: 'pipelinetfstate'
+              backendAzureRmContainerName: 'xyzcontainer'
               backendAzureRmKey: 'terraform.tfstate'
-
           - task: TerraformTask@5
-            displayName: "Terraform Plan"
             inputs:
               provider: 'azurerm'
               command: 'plan'
-              environmentServiceNameAzureRM: 'rishi_service'
-
+              environmentServiceNameAzureRM: 'xyzconnection'
           - task: TerraformTask@5
-            displayName: "Terraform Apply"
             inputs:
               provider: 'azurerm'
               command: 'apply'
-              environmentServiceNameAzureRM: 'rishi_service'
+              environmentServiceNameAzureRM: 'xyzconnection'
+
