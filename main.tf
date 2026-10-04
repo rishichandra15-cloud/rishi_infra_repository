@@ -39,3 +39,12 @@ tags = {
     owner = "rishi"
 }
 }
+
+resource "azurerm_resource_group" "rishi34"{
+name = "rishi-rg34"
+location = "central india"
+
+tags = {
+    owner = "rishi"
+}
+}
