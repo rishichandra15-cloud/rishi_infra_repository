@@ -1,6 +1,7 @@
 trigger: 
  branches:
-   -main
+   include:
+     - main
 
 
 pool: ragent-pool
@@ -50,6 +51,7 @@ stages:
     displayName: approval
     jobs:
       - job: approval
+        pool: server
         steps:
         - task: ManualValidation@1
           inputs:
