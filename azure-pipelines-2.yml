@@ -1,0 +1,89 @@
+trigger: 
+ branches:
+   -main
+
+
+pool: ragent-pool
+
+stages:
+  - stage: init
+    displayName: init
+    jobs:
+      - job: init
+        steps:
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: 'xyzconnection'
+            backendAzureRmStorageAccountName: 'pipelinetfstate'
+            backendAzureRmContainerName: 'xyzcontainer'
+            backendAzureRmKey: 'rishi.tfstate'
+
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'validate'
+
+  - stage: plan
+    displayName: plan
+    jobs:
+      - job: plan
+        displayName: plan
+        steps:
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: 'xyzconnection'
+            backendAzureRmStorageAccountName: 'pipelinetfstate'
+            backendAzureRmContainerName: 'xyzcontainer'
+            backendAzureRmKey: 'rishi.tfstate'
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            environmentServiceNameAzureRM: 'xyzconnection'
+
+
+  - stage: approval
+    displayName: approval
+    jobs:
+      - job: approval
+        steps:
+        - task: ManualValidation@1
+          inputs:
+            notifyUsers: 'rishi@14cb'
+            onTimeout: 'resume'
+
+
+  - stage: apply
+    condition: 
+    displayName: apply
+    jobs:
+      - job: apply
+        displayName: apply
+        steps:
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: 'xyzconnection'
+            backendAzureRmStorageAccountName: 'pipelinetfstate'
+            backendAzureRmContainerName: 'xyzcontainer'
+            backendAzureRmKey: 'rishi.tfstate'
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'apply'
+      
+
+
+    
+      
+
+
+
+
+
+
